@@ -1,6 +1,6 @@
 const GEMINI_BASE = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent';
 
-export async function callGemini(apiKey, sys, messages, { jsonMode = false, useSearch = false } = {}) {
+export async function callGemini(apiKey, sys, messages, { jsonMode = false, useSearch = false, noThinking = false, maxTokens = 3000 } = {}) {
   if (!apiKey) return 'APIキーが設定されていません。右上の「設定」から設定してください。';
   try {
     const contents = messages.map(m => ({
@@ -8,8 +8,9 @@ export async function callGemini(apiKey, sys, messages, { jsonMode = false, useS
       parts: [{ text: m.text }],
     }));
     const genConfig = {
-      maxOutputTokens: 3000,
+      maxOutputTokens: maxTokens,
       ...(jsonMode ? { responseMimeType: 'application/json' } : {}),
+      ...(noThinking ? { thinkingConfig: { thinkingBudget: 0 } } : {}),
     };
     const body = {
       system_instruction: { parts: [{ text: sys }] },

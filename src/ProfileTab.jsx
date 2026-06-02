@@ -62,7 +62,7 @@ export default function ProfileTab({ data }) {
     if (disliked.length > 0) prompt += '【低評価 ★1-2】\n' + disliked.map(fmt).join('\n') + '\n\n';
     if (mid.length > 0) prompt += '【その他】\n' + mid.map(fmt).join('\n') + '\n\n';
     prompt += `体験済み合計: ${done.length}件`;
-    const reply = await callGemini(apiKey, PROFILE_SYS, [{ role: 'user', text: prompt }]);
+    const reply = await callGemini(apiKey, PROFILE_SYS, [{ role: 'user', text: prompt }], { maxTokens: 8000 });
     setAiSummary(reply);
     setAnalyzing(false);
   };
